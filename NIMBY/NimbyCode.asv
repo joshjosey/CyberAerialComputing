@@ -1,4 +1,4 @@
-0%% Not In My Backyard (NIMBY)
+%% Not In My Backyard (NIMBY)
 %   Author: Josh Josey 
 %   Purpose: Demonstrates random waypoint mobility with obstacle avoidance 
 %            logic integrated. During The drone will attempt to avoid 
@@ -6,7 +6,8 @@
 %            does enter one, it will navigate to the nearest boundary and 
 %            exit the area. It contains some code snippets from examples 
 %            within the UAV toolbox documentation.
-%% Define the simulation variables
+%%
+%%-- Define the simulation variables
     
     Px = 6; Py = 6; Pz = 6.5;       %Proportional Coeffecients
     Dx = 1.5; Dy = 1.5; Dz = 2.5;   %Derivative Coeffecients
@@ -16,12 +17,9 @@
     DroneMass = 0.1;
     UAVSampleTime = 0.01;
     runtime = 75;
-    missionLength = 5;
     escapeMargin = 1;
-    useObstacleAvoidance = 1;
-    restricted_area_ct = 1; %0 => 1, 1 => 3
     
-%% Create a UAV scenario & platform
+%%-- Create a UAV scenario & platform
     hold off
     Scenario = uavScenario("UpdateRate",100,"ReferenceLocation",[0 0 0]);
     %mark the starting location
@@ -39,13 +37,10 @@
     %add the drone mesh over the model (style,size,color,orientation)
     updateMesh(platUAV,"quadrotor",{1},[1 0 1],eul2tform([0 0 pi]));
 
-%% Add in obstacles
+%%-- Add in obstacles
     %Obstacle locations & dimensions
-    if restricted_area_ct >= 1
-        obstaclePos = [5 25 0; 25 25 0; 25 5 0];%[5 5 0;5 25 0; 25 25 0; 25 5 0];
-    else
-        obstaclePos = [15 15 0];
-    end
+    obstaclePos = [5 25 0; 25 25 0; 25 5 0];%[5 5 0;5 25 0; 25 25 0; 25 5 0];
+
     obstacleHeight = 15;
     obstacleWidth = 5;
     
@@ -66,9 +61,11 @@
                    [obstaclePos(i,3) obstaclePos(i,3)+obstacleHeight]
                 },[1 .3 0]);
     end
+ 
+    xlim([0 30]);  
+    ylim([0 30]);
 
-
-%% Run the simulation and extract data
+%%-- Run the simulation and extract data
     out = sim("NIMBY.slx");
 
     %extract the drones trajectory
@@ -78,7 +75,7 @@
     Waypoints = squeeze(out.waypoints)';
     Waypoints = unique(Waypoints, 'rows','stable');
     %Waypoints = [Waypoints(1,:);Waypoints(end,:)]
-%% Plot the waypoints & trajectory
+%%-- Plot the waypoints & trajectory
     clf;
     hold on;
     [X,Y,Z] = sphere;
@@ -100,10 +97,7 @@
     
     show3D(Scenario);
 
-    xlim([0 30]);  
-    ylim([0 30]);
-
-%% Simulation Report
+%%-- Simulation Report
     disp("Simulation Report ---")
     str = 'Total Time: '; value = out.tout(end); fprintf('%s %.3f\n', str, value);
     
