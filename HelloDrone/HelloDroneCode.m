@@ -69,6 +69,7 @@
     
     show3D(Scenario);
 
+%{
 %%-- Simulation Report
     disp("Simulation Report ---")
     str = 'Total Time: '; value = out.tout(end); fprintf('%s %.3f\n', str, value);
@@ -87,3 +88,4 @@
     str = 'Total Distance: '; value = dist; fprintf('%s %.3f\n', str, value);
     
     str = 'Number of waypoints: '; value = size(Waypoints); fprintf('%s %d\n', str, value);
+%}
